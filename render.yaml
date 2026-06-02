@@ -1,0 +1,37 @@
+# render.yaml
+# -----------
+# Render Blueprint — defines the web service.
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Deploy from the Render dashboard:
+#   1. Push this repo to GitHub / GitLab
+#   2. New → Blueprint → point to the repo
+#   3. Render reads this file and provisions the service automatically.
+
+services:
+  - type: web
+    name: eg-diagram-cropper
+    runtime: docker          # use our Dockerfile (not a managed runtime)
+    dockerfilePath: ./Dockerfile
+    region: frankfurt        # change to: oregon | ohio | singapore | frankfurt
+    plan: starter            # free tier; upgrade to standard for more RAM/CPU
+
+    # Render injects PORT automatically — our CMD already reads $PORT.
+    # Add any other env vars here (e.g. LOG_LEVEL).
+    envVars:
+      - key: LOG_LEVEL
+        value: info
+
+    # Health-check — Render restarts the instance if /health stops responding.
+    healthCheckPath: /health
+
+    # Auto-deploy on every push to the default branch.
+    autoDeploy: true
+
+    # Scale: one instance is fine for a processing microservice.
+    # Increase numInstances for parallel upload capacity.
+    scaling:
+      minInstances: 1
+      maxInstances: 3
+      targetMemoryPercent: 80
+      targetCPUPercent: 80

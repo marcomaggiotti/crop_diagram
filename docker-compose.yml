@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: "8000"
+      LOG_LEVEL: "debug"
+    volumes:
+      # Hot-reload: mount source so you can edit api.py without rebuilding.
+      # Remove in production / CI.
+      - ./diagram_cropping_api.py:/app/diagram_cropping_api.py:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
