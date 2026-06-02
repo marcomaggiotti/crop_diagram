@@ -43,7 +43,7 @@ EXPOSE $PORT
 # Graceful shutdown with --timeout-graceful-shutdown gives in-flight requests
 # time to finish before the container stops.
 CMD ["sh", "-c", \
-     "uvicorn api:app \
+     "uvicorn diagram_cropping_api:app \
        --host 0.0.0.0 \
        --port $PORT \
        --workers 2 \
