@@ -31,7 +31,7 @@ WORKDIR /app
 # Copy installed packages from builder
 COPY --from=builder /install /usr/local
 
-COPY digram_cropping_api.py .
+COPY diagram_cropping_api.py .
 
 USER appuser
 
